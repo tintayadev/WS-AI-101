@@ -1,26 +1,173 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crea tu primera IA</title>
-  <style>
-    :root{--bg:#090b12;--panel:#111522;--text:#f5f7fb;--muted:#a9b1c7;--accent:#27d3c2;--purple:#a78bfa}
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 15%,rgba(124,92,255,.16),transparent 28%),radial-gradient(circle at 85% 75%,rgba(39,211,194,.12),transparent 24%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;display:grid;place-items:center;padding:40px 24px}main{width:min(1100px,100%)}.kicker{color:var(--accent);text-transform:uppercase;letter-spacing:.15em;font-weight:700;font-size:14px;margin-bottom:18px}h1{margin:0;font-size:clamp(52px,8vw,110px);line-height:.95;letter-spacing:-.05em}.subtitle{margin-top:22px;color:var(--muted);font-size:clamp(20px,2.5vw,30px);max-width:760px;line-height:1.4}.sessions{margin-top:56px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.session{text-decoration:none;color:inherit;background:rgba(17,21,34,.82);border:1px solid rgba(255,255,255,.09);border-radius:26px;padding:30px;min-height:270px;transition:transform .2s ease,border-color .2s ease,background .2s ease}.session:hover{transform:translateY(-6px);border-color:rgba(39,211,194,.45);background:rgba(20,25,40,.95)}.number{color:var(--accent);font-size:14px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.session h2{margin:22px 0 12px;font-size:32px;line-height:1.05;letter-spacing:-.03em}.session p{margin:0;color:var(--muted);font-size:18px;line-height:1.45}.disabled{opacity:.42;pointer-events:none}.live{display:inline-block;margin-top:24px;padding:10px 14px;border-radius:999px;background:rgba(39,211,194,.1);color:#bffaf2;font-weight:700;font-size:14px}footer{margin-top:48px;color:var(--muted);font-size:14px}@media(max-width:800px){.sessions{grid-template-columns:1fr}.session{min-height:auto}}
-  </style>
-</head>
-<body>
-  <main>
-    <div class="kicker">Wasi Space × Nos Gusta la Ciencia</div>
-    <h1>Crea tu primera <span style="color:var(--accent)">IA</span></h1>
-    <p class="subtitle">Mini curso práctico para entender cómo aprende una máquina, entrenar nuestros propios modelos y convertirlos en pequeños proyectos.</p>
-    <div class="live">3 sesiones · práctico · desde cero</div>
-    <section class="sessions">
-      <a class="session" href="./session-1/"><div class="number">Sesión 01</div><h2>Cómo aprende una máquina?</h2><p>IA, datos, clases, datasets, entrenamiento, predicción y nuestro primer modelo.</p></a>
-      <a class="session" href="./session-2/"><div class="number">Sesión 02</div><h2>Entrena, prueba y mejora</h2><p>Construye tu clasificador, busca sus errores, mejora el dataset y exporta el modelo.</p></a>
-      <a class="session disabled"><div class="number">Sesión 03 · Próximamente</div><h2>De modelo a proyecto</h2><p>Usaremos nuestro modelo dentro de una experiencia interactiva.</p></a>
-    </section>
-    <footer>Crea tu primera IA · 2026</footer>
-  </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crea tu primera IA</title>
+    <style>
+      :root {
+        --bg: #090b12;
+        --panel: #111522;
+        --text: #f5f7fb;
+        --muted: #a9b1c7;
+        --accent: #27d3c2;
+        --purple: #a78bfa;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(
+            circle at 15% 15%,
+            rgba(124, 92, 255, 0.16),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 85% 75%,
+            rgba(39, 211, 194, 0.12),
+            transparent 24%
+          ),
+          var(--bg);
+        color: var(--text);
+        font-family: Inter, system-ui, sans-serif;
+        display: grid;
+        place-items: center;
+        padding: 40px 24px;
+      }
+      main {
+        width: min(1100px, 100%);
+      }
+      .kicker {
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 18px;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(52px, 8vw, 110px);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+      }
+      .subtitle {
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: clamp(20px, 2.5vw, 30px);
+        max-width: 760px;
+        line-height: 1.4;
+      }
+      .sessions {
+        margin-top: 56px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+      }
+      .session {
+        text-decoration: none;
+        color: inherit;
+        background: rgba(17, 21, 34, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 26px;
+        padding: 30px;
+        min-height: 270px;
+        transition:
+          transform 0.2s ease,
+          border-color 0.2s ease,
+          background 0.2s ease;
+      }
+      .session:hover {
+        transform: translateY(-6px);
+        border-color: rgba(39, 211, 194, 0.45);
+        background: rgba(20, 25, 40, 0.95);
+      }
+      .number {
+        color: var(--accent);
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .session h2 {
+        margin: 22px 0 12px;
+        font-size: 32px;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+      .session p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.45;
+      }
+      .disabled {
+        opacity: 0.42;
+        pointer-events: none;
+      }
+      .live {
+        display: inline-block;
+        margin-top: 24px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(39, 211, 194, 0.1);
+        color: #bffaf2;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      footer {
+        margin-top: 48px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      @media (max-width: 800px) {
+        .sessions {
+          grid-template-columns: 1fr;
+        }
+        .session {
+          min-height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="kicker">Wasi Space × Nos Gusta la Ciencia</div>
+      <h1>Crea tu primera <span style="color: var(--accent)">IA</span></h1>
+      <p class="subtitle">
+        Mini curso práctico para entender cómo aprende una máquina, entrenar
+        nuestros propios modelos y convertirlos en pequeños proyectos.
+      </p>
+      <div class="live">3 sesiones · práctico · desde cero</div>
+      <section class="sessions">
+        <a class="session" href="./session-1/"
+          ><div class="number">Sesión 01</div>
+          <h2>Cómo aprende una máquina?</h2>
+          <p>
+            IA, datos, clases, datasets, entrenamiento, predicción y nuestro
+            primer modelo.
+          </p></a
+        >
+        <a class="session" href="./session-2/"
+          ><div class="number">Sesión 02</div>
+          <h2>Entrena, prueba y mejora</h2>
+          <p>
+            Construye tu clasificador, busca sus errores, mejora el dataset y
+            exporta el modelo.
+          </p></a
+        >
+        <a class="session" href="./session-3/">
+          <div class="number">Sesión 03</div>
+
+          <h2>De modelo a proyecto</h2>
+
+          <p>Usaremos nuestro modelo dentro de una experiencia interactiva.</p>
+        </a>
+      </section>
+      <footer>Crea tu primera IA · 2026</footer>
+    </main>
+  </body>
 </html>
