@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Crea tu primera IA — Sesión 3</title>
+
+  <style>
+    :root {
+      --bg: #090b12;
+      --panel: #111522;
+      --text: #f5f7fb;
+      --muted: #a9b1c7;
+      --accent: #27d3c2;
+      --purple: #a78bfa;
+      --blue: #4c97ff;
+      --orange: #ffab19;
+      --danger: #ff6b7a;
+      --warning: #ffd166;
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(124,92,255,.16), transparent 28%),
+        radial-gradient(circle at 85% 75%, rgba(39,211,194,.12), transparent 25%),
+        var(--bg);
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+
+      display: grid;
+      place-items: center;
+
+      padding: clamp(30px, 5vw, 80px);
+
+      opacity: 0;
+      transform: translateX(38px) scale(.985);
+
+      pointer-events: none;
+
+      transition:
+        opacity .4s ease,
+        transform .4s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    .content {
+      width: min(1200px, 100%);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(58px, 9vw, 136px);
+      line-height: .94;
+      letter-spacing: -.055em;
+    }
+
+    h2 {
+      font-size: clamp(44px, 6.5vw, 94px);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+
+    .kicker {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-weight: 800;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .sub {
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: clamp(21px, 2.4vw, 34px);
+      line-height: 1.35;
+      max-width: 920px;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .center .sub {
+      margin-inline: auto;
+    }
+
+    .accent { color: var(--accent); }
+    .purple { color: var(--purple); }
+    .blue { color: var(--blue); }
+    .warning { color: var(--warning); }
+    .danger { color: var(--danger); }
+
+    .big-question {
+      font-size: clamp(56px, 8vw, 116px);
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: 24px;
+      margin-top: 42px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: var(--radius);
+
+      background: rgba(17,21,34,.82);
+      border: 1px solid rgba(255,255,255,.1);
+
+      min-height: 180px;
+    }
+
+    .card h3 {
+      font-size: clamp(23px, 2.4vw, 35px);
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: clamp(17px,1.6vw,24px);
+    }
+
+    .emoji {
+      display: block;
+      font-size: clamp(48px,5vw,78px);
+      margin-bottom: 16px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: .35s ease;
+    }
+
+    .reveal.shown {
+      opacity: 1;
+      transform: none;
+    }
+
+    .flow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+
+      gap: 18px;
+      margin-top: 50px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 19px 27px;
+
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.13);
+
+      font-weight: 800;
+      font-size: clamp(22px,2.3vw,34px);
+    }
+
+    .arrow {
+      color: var(--accent);
+      font-size: 40px;
+    }
+
+    .resource {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+
+      margin-top: 28px;
+      margin-right: 8px;
+
+      padding: 15px 21px;
+      border-radius: 999px;
+
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+
+      background: rgba(39,211,194,.12);
+      border: 1px solid rgba(39,211,194,.32);
+
+      transition: .2s;
+    }
+
+    .resource:hover {
+      transform: translateY(-2px);
+      background: rgba(39,211,194,.2);
+    }
+
+    .scratch-window {
+      margin-top: 38px;
+      border-radius: 30px;
+      overflow: hidden;
+
+      display: grid;
+      grid-template-columns: .44fr .56fr;
+
+      background: white;
+      color: #202124;
+
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .blocks {
+      padding: 32px 24px;
+      background: #f5f5f7;
+      border-right: 1px solid #ddd;
+    }
+
+    .block {
+      width: fit-content;
+
+      margin-bottom: 11px;
+      padding: 11px 16px;
+
+      border-radius: 11px;
+
+      color: white;
+      font-size: 17px;
+      font-weight: 800;
+
+      background: #9966ff;
+    }
+
+    .block.blue {
+      background: #4c97ff;
+    }
+
+    .block.orange {
+      background: #ffab19;
+    }
+
+    .block.yellow {
+      background: #ffbf00;
+      color: #312400;
+    }
+
+    .block.green {
+      background: #59c059;
+    }
+
+    .stage {
+      display: grid;
+      place-items: center;
+
+      padding: 40px;
+
+      min-height: 360px;
+
+      background:
+        linear-gradient(
+          140deg,
+          #eaf5ff,
+          #ffffff
+        );
+    }
+
+    .sprite {
+      font-size: 110px;
+    }
+
+    .speech {
+      margin-top: 18px;
+
+      padding: 13px 18px;
+
+      border-radius: 18px;
+
+      background: white;
+      border: 2px solid #d8dbe3;
+
+      color: #32343b;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .steps {
+      display: grid;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 62px 1fr;
+      gap: 18px;
+      align-items: center;
+
+      padding: 19px 22px;
+
+      border-radius: 20px;
+
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .step-number {
+      width: 52px;
+      height: 52px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      background: var(--accent);
+      color: #071311;
+
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .step strong {
+      display: block;
+      font-size: 25px;
+    }
+
+    .step span {
+      display: block;
+      margin-top: 4px;
+
+      color: var(--muted);
+      font-size: 19px;
+    }
+
+    .idea {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea::after {
+      content: "";
+      position: absolute;
+      inset: auto -35px -35px auto;
+
+      width: 110px;
+      height: 110px;
+
+      border-radius: 50%;
+      background: rgba(39,211,194,.08);
+    }
+
+    .levels {
+      margin-top: 42px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .level {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+
+      padding: 18px 22px;
+
+      border-radius: 18px;
+
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+
+      font-size: clamp(20px,2vw,29px);
+      font-weight: 700;
+    }
+
+    .level-tag {
+      min-width: 112px;
+      text-align: center;
+
+      padding: 9px 13px;
+
+      border-radius: 999px;
+
+      background: rgba(124,92,255,.18);
+      color: #cbbcff;
+
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .controls {
+      position: fixed;
+
+      left: 24px;
+      right: 24px;
+      bottom: 17px;
+
+      display: flex;
+      justify-content: space-between;
+
+      color: var(--muted);
+      font-size: 13px;
+
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .progress-wrap {
+      position: fixed;
+
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      height: 4px;
+
+      background: rgba(255,255,255,.06);
+    }
+
+    .progress {
+      height: 100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          #7c5cff,
+          var(--accent)
+        );
+
+      transition: width .3s;
+    }
+
+    .hint {
+      position: fixed;
+
+      left: 24px;
+      top: 20px;
+
+      color: rgba(255,255,255,.36);
+      font-size: 13px;
+    }
+
+    @media(max-width:850px) {
+
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .scratch-window {
+        grid-template-columns:1fr;
+      }
+
+      .slide {
+        overflow-y:auto;
+        place-items:start center;
+      }
+
+      .content {
+        padding-bottom:80px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="deck">
+
+  <section class="slide active">
+    <div class="content">
+
+      <div class="kicker">
+        Crea tu primera IA · Sesión 3
+      </div>
+
+      <h1>
+        De modelo<br>
+        a <span class="accent">proyecto</span>
+      </h1>
+
+      <p class="sub">
+        Hoy nuestro modelo va a dejar de solo predecir.
+        Vamos a hacer que sus predicciones hagan cosas.
+      </p>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">
+        Hasta ahora
+      </div>
+
+      <div class="flow">
+
+        <span class="pill reveal">
+          Datos
+        </span>
+
+        <span class="arrow reveal">→</span>
+
+        <span class="pill reveal">
+          Entrenamiento
+        </span>
+
+        <span class="arrow reveal">→</span>
+
+        <span class="pill reveal">
+          Modelo
+        </span>
+
+        <span class="arrow reveal">→</span>
+
+        <span class="pill reveal">
+          Predicción
+        </span>
+
+        <span class="arrow reveal">→</span>
+
+        <span class="pill reveal">
+          Acción
+        </span>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Un ejemplo
+      </div>
+
+      <h2>
+        Si el modelo detecta...
+      </h2>
+
+      <div class="scratch-window">
+
+        <div class="blocks">
+
+          <div class="block yellow">
+            cuando bandera verde
+          </div>
+
+          <div class="block blue">
+            si modelo detecta guitarra
+          </div>
+
+          <div class="block orange">
+            decir "Guitarra!"
+          </div>
+
+          <div class="block green">
+            sumar 1 punto
+          </div>
+
+        </div>
+
+        <div class="stage">
+
+          <div class="center">
+
+            <div class="sprite">
+              🐱
+            </div>
+
+            <div class="speech">
+              Guitarra!
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Qué es Scratch?
+      </div>
+
+      <h2>
+        Programar usando <span class="blue">bloques</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">🎮</span>
+          <h3>Juegos</h3>
+          <p>
+            Movimiento, puntos, reglas y desafíos.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🎬</span>
+          <h3>Historias</h3>
+          <p>
+            Personajes que reaccionan y toman decisiones.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">✨</span>
+          <h3>Animaciones</h3>
+          <p>
+            Eventos, sonidos, escenas e interacción.
+          </p>
+        </div>
+
+      </div>
+
+      <a
+        class="resource"
+        href="https://scratch.mit.edu/"
+        target="_blank"
+      >
+        Explorar Scratch ↗
+      </a>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Nuestra herramienta
+      </div>
+
+      <h2>
+        Teachable Machine + <span class="accent">TM2Scratch</span>
+      </h2>
+
+      <p class="sub">
+        Usaremos el modelo que ya entrenamos para obtener
+        sus predicciones dentro de un proyecto tipo Scratch.
+      </p>
+
+      <a
+        class="resource"
+        href="https://stretch3.github.io/"
+        target="_blank"
+      >
+        Abrir Stretch3 ↗
+      </a>
+
+      <a
+        class="resource"
+        href="https://github.com/champierre/tm2scratch/blob/main/README.en.md"
+        target="_blank"
+      >
+        Ver TM2Scratch ↗
+      </a>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Paso a paso
+      </div>
+
+      <h2>
+        Conectar nuestro modelo
+      </h2>
+
+      <div class="steps">
+
+        <div class="step reveal">
+          <div class="step-number">1</div>
+          <div>
+            <strong>Abre tu proyecto</strong>
+            <span>Entramos nuevamente a Teachable Machine.</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-number">2</div>
+          <div>
+            <strong>Upload Model</strong>
+            <span>Subimos el modelo para obtener un enlace compartible.</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-number">3</div>
+          <div>
+            <strong>Copia la URL</strong>
+            <span>Será la conexión entre el modelo y nuestro proyecto.</span>
+          </div>
+        </div>
+
+      </div>
+
+      <a
+        class="resource"
+        href="https://teachablemachine.withgoogle.com/"
+        target="_blank"
+      >
+        Abrir Teachable Machine ↗
+      </a>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        En Stretch3
+      </div>
+
+      <h2>
+        Añadimos la extensión
+        <span class="accent">TM2Scratch</span>
+      </h2>
+
+      <div class="steps">
+
+        <div class="step reveal">
+          <div class="step-number">1</div>
+          <div>
+            <strong>Choose an Extension</strong>
+            <span>Busca TM2Scratch.</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-number">2</div>
+          <div>
+            <strong>Pega el enlace</strong>
+            <span>Cargamos el modelo de Teachable Machine.</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-number">3</div>
+          <div>
+            <strong>Prueba la cámara</strong>
+            <span>Comprueba que reconoce tus clases.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">
+        Nuestro primer programa
+      </div>
+
+      <div class="big-question">
+        Predicción → <span class="accent">respuesta</span>
+      </div>
+
+      <p class="sub">
+        Si detecta una clase, hacemos que el personaje responda.
+      </p>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Ejemplo 1
+      </div>
+
+      <h2>
+        Un <span class="accent">quiz visual</span>
+      </h2>
+
+      <div class="scratch-window">
+
+        <div class="blocks">
+
+          <div class="block yellow">
+            cuando bandera verde
+          </div>
+
+          <div class="block blue">
+            si detecta piano
+          </div>
+
+          <div class="block orange">
+            decir "Correcto"
+          </div>
+
+          <div class="block green">
+            cambiar puntos por 1
+          </div>
+
+        </div>
+
+        <div class="stage">
+          <div class="center">
+
+            <div class="sprite">
+              🎹
+            </div>
+
+            <div class="speech">
+              Qué instrumento es?
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Ejemplo 2
+      </div>
+
+      <h2>
+        Piedra, papel o <span class="accent">tijera</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">✊</span>
+          <h3>Piedra</h3>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">✋</span>
+          <h3>Papel</h3>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">✌️</span>
+          <h3>Tijera</h3>
+        </div>
+
+      </div>
+
+      <p class="sub reveal">
+        El modelo reconoce el gesto y Scratch decide
+        quién gana la ronda.
+      </p>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Ejemplo 3
+      </div>
+
+      <h2>
+        Un juego controlado con <span class="accent">IA</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal idea">
+          <span class="emoji">⬅️</span>
+          <h3>Clase izquierda</h3>
+          <p>
+            El personaje se mueve a la izquierda.
+          </p>
+        </div>
+
+        <div class="card reveal idea">
+          <span class="emoji">⬆️</span>
+          <h3>Clase salto</h3>
+          <p>
+            El personaje salta.
+          </p>
+        </div>
+
+        <div class="card reveal idea">
+          <span class="emoji">➡️</span>
+          <h3>Clase derecha</h3>
+          <p>
+            El personaje se mueve a la derecha.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        No tiene que ser solo imágenes
+      </div>
+
+      <h2>
+        Podemos reconocer <span class="purple">sonidos</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">👏</span>
+          <h3>Aplauso</h3>
+          <p>
+            Saltar o iniciar el juego.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🎵</span>
+          <h3>Sonido</h3>
+          <p>
+            Cambiar una animación.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🗣️</span>
+          <h3>Palabra</h3>
+          <p>
+            Activar una respuesta.
+          </p>
+        </div>
+
+      </div>
+
+      <p class="sub">
+        TM2Scratch también puede trabajar con modelos
+        de clasificación de sonido.
+      </p>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Y también movimiento
+      </div>
+
+      <h2>
+        El cuerpo puede convertirse en un <span class="accent">control</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">🙆</span>
+          <h3>Brazos arriba</h3>
+          <p>
+            Hacer saltar al personaje.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🏃</span>
+          <h3>Pose</h3>
+          <p>
+            Controlar una acción.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🕺</span>
+          <h3>Movimiento</h3>
+          <p>
+            Crear juegos o experiencias físicas.
+          </p>
+        </div>
+
+      </div>
+
+      <a
+        class="resource"
+        href="https://github.com/champierre/tmpose2scratch"
+        target="_blank"
+      >
+        Explorar TMPose2Scratch ↗
+      </a>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Ideas
+      </div>
+
+      <h2>
+        Qué podríamos <span class="accent">crear</span>?
+      </h2>
+
+      <div class="grid-4">
+
+        <div class="card reveal idea">
+          <span class="emoji">♻️</span>
+          <h3>Reciclaje</h3>
+          <p>
+            Detectar un tipo de residuo y mostrar dónde depositarlo.
+          </p>
+        </div>
+
+        <div class="card reveal idea">
+          <span class="emoji">🌱</span>
+          <h3>Plantas</h3>
+          <p>
+            Clasificar ejemplos y mostrar información.
+          </p>
+        </div>
+
+        <div class="card reveal idea">
+          <span class="emoji">🎸</span>
+          <h3>Música</h3>
+          <p>
+            Reconocer instrumentos y convertirlo en un quiz.
+          </p>
+        </div>
+
+        <div class="card reveal idea">
+          <span class="emoji">🐶</span>
+          <h3>Mascotas</h3>
+          <p>
+            Reconocer categorías y reaccionar con animaciones.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Challenge de hoy
+      </div>
+
+      <h2>
+        Convierte tu modelo en una <span class="accent">interacción</span>
+      </h2>
+
+      <div class="levels">
+
+        <div class="level reveal">
+          <span class="level-tag">
+            NIVEL 1
+          </span>
+
+          Mostrar la clase detectada.
+        </div>
+
+        <div class="level reveal">
+          <span class="level-tag">
+            NIVEL 2
+          </span>
+
+          Hacer que un personaje responda.
+        </div>
+
+        <div class="level reveal">
+          <span class="level-tag">
+            NIVEL 3
+          </span>
+
+          Agregar puntos, sonidos o cambios de escenario.
+        </div>
+
+        <div class="level reveal">
+          <span class="level-tag">
+            NIVEL 4
+          </span>
+
+          Convertirlo en un pequeño juego o experiencia.
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">
+        Y después?
+      </div>
+
+      <div class="big-question">
+        Scratch es solo el <span class="accent">inicio</span>
+      </div>
+
+      <p class="sub">
+        El mismo concepto puede llevarse después
+        a páginas web, aplicaciones y proyectos mucho más grandes.
+      </p>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">
+        Si quieren seguir explorando
+      </div>
+
+      <h2>
+        De bloques a <span class="accent">código</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">🌐</span>
+          <h3>Web</h3>
+          <p>
+            Usar modelos desde JavaScript y crear interfaces propias.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🧠</span>
+          <h3>TensorFlow.js</h3>
+          <p>
+            Trabajar con machine learning directamente en el navegador.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🔧</span>
+          <h3>Hardware</h3>
+          <p>
+            Conectar modelos a sensores, dispositivos y proyectos físicos.
+          </p>
+        </div>
+
+      </div>
+
+      <a
+        class="resource"
+        href="https://codelabs.developers.google.com/tensorflowjs-transfer-learning-teachable-machine?hl=es-419"
+        target="_blank"
+      >
+        Explorar TensorFlow.js ↗
+      </a>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">
+        Crea tu primera IA
+      </div>
+
+      <div class="big-question">
+        Ya no solo usaste <span class="purple">IA</span>
+      </div>
+
+      <p class="sub reveal">
+        Entrenaste un modelo, lo probaste,
+        encontraste sus errores y lo convertiste en parte de un proyecto.
+      </p>
+    </div>
+  </section>
+
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="big-question">
+        Qué construirías <span class="accent">después</span>?
+      </div>
+
+      <p class="sub">
+        Esto es solo el comienzo.
+      </p>
+    </div>
+  </section>
+
+</div>
+
+
+<div class="hint">
+  ← → navegar · espacio revelar · F pantalla completa
+</div>
+
+
+<div class="controls">
+  <span id="counter"></span>
+
+  <span>
+    Crea tu primera IA · Wasi Space × Nos Gusta la Ciencia
+  </span>
+</div>
+
+
+<div class="progress-wrap">
+  <div class="progress" id="progress"></div>
+</div>
+
+
+<script>
+
+  const slides =
+    [...document.querySelectorAll(".slide")];
+
+  const counter =
+    document.getElementById("counter");
+
+  const progress =
+    document.getElementById("progress");
+
+  let index = 0;
+
+
+  function reveals() {
+
+    return [
+      ...slides[index]
+        .querySelectorAll(".reveal")
+    ];
+  }
+
+
+  function update() {
+
+    slides.forEach((slide, i) => {
+
+      slide.classList.toggle(
+        "active",
+        i === index
+      );
+    });
+
+    counter.textContent =
+      `${index + 1} / ${slides.length}`;
+
+    progress.style.width =
+      `${((index + 1) / slides.length) * 100}%`;
+  }
+
+
+  function next() {
+
+    const hidden =
+      reveals()
+        .find(
+          el =>
+            !el.classList.contains("shown")
+        );
+
+    if (hidden) {
+
+      hidden.classList.add("shown");
+      return;
+    }
+
+    if (index < slides.length - 1) {
+
+      index++;
+      update();
+    }
+  }
+
+
+  function prev() {
+
+    const shown =
+      reveals()
+        .filter(
+          el =>
+            el.classList.contains("shown")
+        );
+
+    if (shown.length) {
+
+      shown[
+        shown.length - 1
+      ].classList.remove("shown");
+
+      return;
+    }
+
+    if (index > 0) {
+
+      index--;
+      update();
+    }
+  }
+
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        [
+          "ArrowRight",
+          "PageDown",
+          "Enter"
+        ].includes(event.key)
+      ) {
+        next();
+      }
+
+      if (
+        [
+          "ArrowLeft",
+          "PageUp",
+          "Backspace"
+        ].includes(event.key)
+      ) {
+        prev();
+      }
+
+      if (event.code === "Space") {
+
+        event.preventDefault();
+        next();
+      }
+
+      if (
+        event.key.toLowerCase() === "f"
+      ) {
+
+        if (!document.fullscreenElement) {
+
+          document.documentElement
+            .requestFullscreen?.();
+
+        } else {
+
+          document.exitFullscreen?.();
+        }
+      }
+    }
+  );
+
+
+  document.addEventListener(
+    "click",
+    event => {
+
+      if (event.target.closest("a")) {
+        return;
+      }
+
+      next();
+    }
+  );
+
+
+  update();
+
+</script>
+
+</body>
+</html>
