@@ -1,37 +1,1168 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Crea tu primera IA — Sesión 2</title><style>
-:root{--bg:#090b12;--panel:#111522;--text:#f5f7fb;--muted:#a9b1c7;--accent:#27d3c2;--purple:#a78bfa;--danger:#ff6b7a;--warning:#ffd166;--radius:28px}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}body{background:radial-gradient(circle at 15% 15%,rgba(124,92,255,.16),transparent 26%),radial-gradient(circle at 85% 75%,rgba(39,211,194,.12),transparent 24%),var(--bg)}
-.deck{position:relative;width:100vw;height:100vh}.slide{position:absolute;inset:0;display:grid;place-items:center;padding:clamp(28px,5vw,82px);opacity:0;transform:translateX(44px) scale(.985);pointer-events:none;transition:opacity .45s ease,transform .45s ease}.slide.active{opacity:1;transform:none;pointer-events:auto}.content{width:min(1240px,100%);max-height:100%}h1,h2,h3,p{margin:0}h1{font-size:clamp(56px,9vw,140px);line-height:.95;letter-spacing:-.055em;max-width:1100px}h2{font-size:clamp(44px,7vw,104px);line-height:1;letter-spacing:-.045em}.sub{margin-top:28px;font-size:clamp(22px,2.6vw,38px);line-height:1.35;color:var(--muted);max-width:980px}.kicker{font-size:18px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:24px}.accent{color:var(--accent)}.purple{color:var(--purple)}.danger{color:var(--danger)}.warning{color:var(--warning)}.center{text-align:center}.center .sub{margin-inline:auto}.big-question{font-size:clamp(56px,8vw,122px);line-height:1.02;letter-spacing:-.05em;max-width:1150px}.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;margin-top:42px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:42px}.card{background:rgba(17,21,34,.82);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);padding:30px;min-height:190px;box-shadow:0 18px 70px rgba(0,0,0,.26);backdrop-filter:blur(14px)}.card h3{font-size:clamp(24px,2.5vw,38px);margin-bottom:14px}.card p{font-size:clamp(18px,1.7vw,26px);color:var(--muted);line-height:1.35}.emoji{font-size:clamp(50px,6vw,90px);display:block;margin-bottom:18px}.flow{display:flex;align-items:center;justify-content:center;gap:clamp(12px,2vw,34px);margin-top:54px;flex-wrap:wrap}.pill{padding:20px 28px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:clamp(22px,2.4vw,36px);font-weight:800}.arrow{color:var(--accent);font-size:clamp(28px,3vw,48px)}.vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:30px;margin-top:44px}.vs .side{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:34px;min-height:290px;display:grid;place-items:center;text-align:center;font-size:clamp(30px,3.8vw,56px);font-weight:800}.vs .middle{font-weight:900;font-size:clamp(30px,3vw,54px);color:var(--muted)}.timeline{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:28px}.year-card{border-radius:var(--radius);padding:36px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09)}.year{font-size:clamp(54px,6vw,92px);font-weight:900;letter-spacing:-.05em}.caption{margin-top:10px;font-size:clamp(20px,2vw,30px);color:var(--muted)}.quote{font-size:clamp(38px,5vw,74px);line-height:1.13;letter-spacing:-.035em;max-width:1100px}.tiny{margin-top:20px;font-size:18px;color:var(--muted)}.reveal{opacity:0;transform:translateY(18px);transition:opacity .35s ease,transform .35s ease}.reveal.shown{opacity:1;transform:none}.controls{position:fixed;left:24px;right:24px;bottom:18px;display:flex;align-items:center;justify-content:space-between;z-index:50;color:var(--muted);font-size:14px;pointer-events:none}.progress-wrap{position:fixed;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.06);z-index:60}.progress{height:100%;width:0;background:linear-gradient(90deg,#7c5cff,var(--accent));transition:width .3s ease}.hint{position:fixed;top:20px;left:24px;z-index:70;color:rgba(255,255,255,.42);font-size:13px;letter-spacing:.04em}.token-demo{margin-top:46px;display:flex;gap:10px;flex-wrap:wrap}.token{padding:16px 18px;border-radius:14px;font-size:clamp(26px,3vw,42px);font-weight:800;background:rgba(124,92,255,.15);border:1px solid rgba(167,139,250,.35)}.challenge{border:2px solid rgba(39,211,194,.42);background:linear-gradient(135deg,rgba(39,211,194,.08),rgba(124,92,255,.08));border-radius:34px;padding:42px;margin-top:42px}.challenge p{font-size:clamp(28px,3.5vw,52px);line-height:1.15;font-weight:800}.resource{display:inline-flex;align-items:center;gap:10px;margin-top:28px;padding:14px 20px;border-radius:16px;background:rgba(39,211,194,.12);border:1px solid rgba(39,211,194,.34);color:#dffefa;text-decoration:none;font-weight:800;font-size:18px;transition:.2s ease}.resource:hover{transform:translateY(-2px);background:rgba(39,211,194,.18)}.preview{margin-top:34px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:26px;align-items:stretch}.preview img{width:100%;height:100%;min-height:280px;object-fit:cover;border-radius:26px;border:1px solid rgba(255,255,255,.1)}.preview .card{min-height:280px;display:flex;flex-direction:column;justify-content:center}.check{display:flex;gap:16px;align-items:flex-start;font-size:clamp(22px,2.3vw,34px);margin:20px 0;color:var(--text)}.check span:first-child{color:var(--accent)}.metric{font-size:clamp(70px,11vw,170px);font-weight:900;line-height:.9;letter-spacing:-.06em}.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:38px}.compare .card{min-height:260px}.tag{display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(167,139,250,.13);border:1px solid rgba(167,139,250,.28);font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#d7c9ff}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#070910;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px;font-size:clamp(20px,2vw,30px);line-height:1.5;margin-top:28px;color:#d9e2ff;overflow:auto}.navhome{position:fixed;right:24px;top:18px;z-index:70;color:rgba(255,255,255,.56);text-decoration:none;font-size:13px}.navhome:hover{color:var(--text)}
-@media(max-width:850px){.grid-2,.grid-3,.timeline,.preview,.compare{grid-template-columns:1fr}.vs{grid-template-columns:1fr}.vs .middle{transform:rotate(90deg);justify-self:center}.slide{overflow-y:auto;place-items:start center}.content{padding-bottom:80px}.hint{display:none}}
-</style></head><body>
-<a class="navhome" href="../">← menú</a>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Crea tu primera IA — Sesión 2</title>
+
+  <style>
+    :root {
+      --bg: #090b12;
+      --panel: #111522;
+      --text: #f5f7fb;
+      --muted: #a9b1c7;
+      --accent: #27d3c2;
+      --purple: #a78bfa;
+      --warning: #ffd166;
+      --danger: #ff6b7a;
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+
+      background: var(--bg);
+      color: var(--text);
+
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(124,92,255,.16), transparent 28%),
+        radial-gradient(circle at 85% 75%, rgba(39,211,194,.12), transparent 25%),
+        var(--bg);
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+
+      display: grid;
+      place-items: center;
+
+      padding: clamp(30px, 5vw, 80px);
+
+      opacity: 0;
+      transform: translateX(38px) scale(.985);
+
+      pointer-events: none;
+
+      transition:
+        opacity .4s ease,
+        transform .4s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    .content {
+      width: min(1200px, 100%);
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(58px, 9vw, 136px);
+      line-height: .94;
+      letter-spacing: -.055em;
+    }
+
+    h2 {
+      font-size: clamp(44px, 6.5vw, 94px);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+
+    .kicker {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-weight: 800;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .sub {
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: clamp(21px, 2.4vw, 34px);
+      line-height: 1.35;
+      max-width: 920px;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .center .sub {
+      margin-inline: auto;
+    }
+
+    .accent { color: var(--accent); }
+    .purple { color: var(--purple); }
+    .warning { color: var(--warning); }
+    .danger { color: var(--danger); }
+
+    .big-question {
+      font-size: clamp(56px, 8vw, 116px);
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 24px;
+      margin-top: 42px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: var(--radius);
+      background: rgba(17,21,34,.82);
+      border: 1px solid rgba(255,255,255,.1);
+      min-height: 180px;
+    }
+
+    .card h3 {
+      font-size: clamp(24px,2.5vw,36px);
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: clamp(18px,1.7vw,25px);
+    }
+
+    .emoji {
+      display: block;
+      font-size: clamp(50px,5vw,80px);
+      margin-bottom: 16px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: .35s ease;
+    }
+
+    .reveal.shown {
+      opacity: 1;
+      transform: none;
+    }
+
+    .flow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+
+      gap: 18px;
+      margin-top: 50px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 19px 27px;
+
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.13);
+
+      font-weight: 800;
+      font-size: clamp(22px,2.3vw,34px);
+    }
+
+    .arrow {
+      color: var(--accent);
+      font-size: 40px;
+    }
+
+    .resource {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+
+      margin-top: 28px;
+      margin-right: 8px;
+
+      padding: 15px 21px;
+      border-radius: 999px;
+
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+
+      background: rgba(39,211,194,.12);
+      border: 1px solid rgba(39,211,194,.32);
+
+      transition: .2s;
+    }
+
+    .resource:hover {
+      transform: translateY(-2px);
+      background: rgba(39,211,194,.2);
+    }
+
+    .animal-layout {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 38px;
+      margin-top: 30px;
+    }
+
+    .animal-image {
+      width: 100%;
+      max-height: 61vh;
+      object-fit: cover;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .checklist {
+      display: grid;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .check {
+      padding: 18px 21px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.065);
+      border: 1px solid rgba(255,255,255,.1);
+      font-size: clamp(20px,2vw,29px);
+      font-weight: 700;
+    }
+
+    .confidence {
+      margin-top: 50px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 90px;
+      gap: 20px;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .bar {
+      height: 26px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg,#7c5cff,var(--accent));
+    }
+
+    .compare {
+      margin-top: 46px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .version {
+      padding: 30px;
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.055);
+    }
+
+    .version strong {
+      font-size: 42px;
+    }
+
+    .version p {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1.4;
+    }
+
+    .vs {
+      font-weight: 900;
+      font-size: 34px;
+      color: var(--muted);
+    }
+
+    .scratch-preview {
+      margin-top: 40px;
+      border-radius: 30px;
+      overflow: hidden;
+
+      display: grid;
+      grid-template-columns: .42fr .58fr;
+
+      background: #fff;
+      color: #202124;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .scratch-sidebar {
+      background: #4c97ff;
+      padding: 34px 25px;
+    }
+
+    .block {
+      display: block;
+      width: fit-content;
+      margin-bottom: 12px;
+      padding: 12px 18px;
+
+      border-radius: 12px;
+
+      color: white;
+      font-weight: 800;
+      font-size: 17px;
+
+      background: #9966ff;
+    }
+
+    .block.blue {
+      background: #4c97ff;
+    }
+
+    .block.orange {
+      background: #ffab19;
+    }
+
+    .scratch-stage {
+      display: grid;
+      place-items: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .sprite {
+      font-size: 110px;
+    }
+
+    .controls {
+      position: fixed;
+
+      left: 24px;
+      right: 24px;
+      bottom: 17px;
+
+      display: flex;
+      justify-content: space-between;
+
+      color: var(--muted);
+
+      font-size: 13px;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .progress-wrap {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      height: 4px;
+      background: rgba(255,255,255,.06);
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg,#7c5cff,var(--accent));
+      transition: width .3s;
+    }
+
+    .hint {
+      position: fixed;
+      left: 24px;
+      top: 20px;
+
+      color: rgba(255,255,255,.36);
+      font-size: 13px;
+    }
+
+    @media(max-width:850px) {
+
+      .grid-2,
+      .grid-3,
+      .animal-layout,
+      .compare,
+      .scratch-preview {
+        grid-template-columns:1fr;
+      }
+
+      .slide {
+        overflow-y:auto;
+        place-items:start center;
+      }
+
+      .content {
+        padding-bottom:80px;
+      }
+
+      .bar-row {
+        grid-template-columns: 90px 1fr 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
 <div class="deck">
-<section class="slide active"><div class="content"><div class="kicker">Crea tu primera IA · Sesión 2</div><h1>Entrena, prueba y <span class="accent">mejora</span></h1><p class="sub">Hoy cada uno va a construir y poner a prueba su propio clasificador de imágenes.</p></div></section>
-<section class="slide"><div class="content center"><div class="kicker">30 segundos de repaso</div><div class="flow"><span class="pill reveal">Datos</span><span class="arrow reveal">→</span><span class="pill reveal">Entrenamiento</span><span class="arrow reveal">→</span><span class="pill reveal">Modelo</span><span class="arrow reveal">→</span><span class="pill reveal">Predicción</span></div></div></section>
-<section class="slide"><div class="content"><div class="kicker">La tarea</div><h2>Qué trajiste para <span class="accent">enseñarle</span>?</h2><div class="grid-3"><div class="card reveal"><span class="emoji">🗂️</span><h3>2+ clases</h3><p>Las categorías que quieres diferenciar.</p></div><div class="card reveal"><span class="emoji">🖼️</span><h3>Hasta 20 imágenes</h3><p>Por clase, para esta práctica.</p></div><div class="card reveal"><span class="emoji">💻</span><h3>En tu computadora</h3><p>Listas para cargarlas al proyecto.</p></div></div></div></section>
-<section class="slide"><div class="content center"><div class="kicker">Abrimos la herramienta</div><div class="big-question">Teachable <span class="accent">Machine</span></div><p class="sub">Proyecto de imágenes → modelo estándar</p><a class="resource" href="https://teachablemachine.withgoogle.com/train" target="_blank" rel="noopener">↗ Abrir Teachable Machine</a></div></section>
-<section class="slide"><div class="content"><div class="kicker">Antes de entrenar</div><h2>Revisa tu <span class="accent">dataset</span></h2><div class="check reveal"><span>✓</span><div>Todas las clases tienen suficientes ejemplos?</div></div><div class="check reveal"><span>✓</span><div>Las imágenes son variadas?</div></div><div class="check reveal"><span>✓</span><div>Hay algo en el fondo que pueda confundir al modelo?</div></div><div class="check reveal"><span>✓</span><div>Las clases están relativamente balanceadas?</div></div></div></section>
-<section class="slide"><div class="content center"><div class="kicker">Primer entrenamiento</div><div class="big-question">Train Model</div><p class="sub">El entrenamiento ocurre en el navegador. Ahora toca observar qué aprendió.</p></div></section>
-<section class="slide"><div class="content"><div class="kicker">Una predicción no es una verdad absoluta</div><h2>Qué significa <span class="accent">87%</span>?</h2><div class="grid-2"><div class="card reveal"><span class="emoji">📊</span><h3>Confianza</h3><p>Qué tan fuerte es la predicción del modelo para esa clase.</p></div><div class="card reveal"><span class="emoji">🧪</span><h3>Hay que probar</h3><p>Un número alto no reemplaza probar con ejemplos nuevos.</p></div></div></div></section>
-<section class="slide"><div class="content center"><div class="kicker">Regla importante</div><div class="quote">No pruebes solo con las mismas imágenes que usaste para entrenar.</div><p class="sub reveal">Queremos saber si el modelo funciona con ejemplos que nunca vio.</p></div></section>
-<section class="slide"><div class="content"><div class="kicker">Test #1</div><h2>Intenta <span class="danger">romper</span> tu modelo</h2><div class="grid-3"><div class="card reveal"><span class="emoji">💡</span><h3>Otra luz</h3></div><div class="card reveal"><span class="emoji">🔄</span><h3>Otro ángulo</h3></div><div class="card reveal"><span class="emoji">🧱</span><h3>Otro fondo</h3></div></div></div></section>
-<section class="slide"><div class="content center"><div class="big-question">Falló?<br><span class="accent reveal">Perfecto.</span></div><p class="sub reveal">Ahora tenemos información para mejorarlo.</p></div></section>
-<section class="slide"><div class="content"><div class="kicker">Diagnóstico</div><h2>Qué pudo salir <span class="warning">mal</span>?</h2><div class="grid-2"><div class="card reveal"><h3>Pocos ejemplos</h3><p>El modelo vio muy poca variedad.</p></div><div class="card reveal"><h3>Clases desbalanceadas</h3><p>Una categoría domina el dataset.</p></div><div class="card reveal"><h3>Fondos repetidos</h3><p>Aprendió contexto en vez del objeto.</p></div><div class="card reveal"><h3>Clases muy parecidas</h3><p>Necesitamos ejemplos más claros o mejores categorías.</p></div></div></div></section>
-<section class="slide"><div class="content center"><div class="kicker">Machine learning es iteración</div><div class="flow"><span class="pill reveal">Probar</span><span class="arrow reveal">→</span><span class="pill reveal">Encontrar errores</span><span class="arrow reveal">→</span><span class="pill reveal">Mejorar datos</span><span class="arrow reveal">→</span><span class="pill reveal">Reentrenar</span></div></div></section>
-<section class="slide"><div class="content"><div class="kicker">Versión 1 vs versión 2</div><h2>Mejor modelo ≠ solo <span class="accent">más datos</span></h2><div class="compare"><div class="card"><span class="tag">v1</span><h3 style="margin-top:18px">Más ejemplos</h3><p>Pero todos muy parecidos.</p></div><div class="card"><span class="tag">v2</span><h3 style="margin-top:18px">Mejores ejemplos</h3><p>Más variedad, mejores clases, menos ruido.</p></div></div></div></section>
-<section class="slide"><div class="content"><div class="kicker">Guardemos el trabajo</div><h2>Save project to <span class="accent">Google Drive</span></h2><p class="sub">Guardar el proyecto permite volver después y seguir editando el dataset y el entrenamiento.</p><a class="resource" href="https://teachablemachine.withgoogle.com/faq" target="_blank" rel="noopener">↗ Saving & Exporting</a></div></section>
-<section class="slide"><div class="content"><div class="kicker">Ahora sí: exportar</div><h2>Tu modelo puede salir de <span class="accent">Teachable Machine</span></h2><div class="grid-2"><div class="card reveal"><span class="emoji">🔗</span><h3>Host online</h3><p>Genera un enlace para usar el modelo desde la web.</p></div><div class="card reveal"><span class="emoji">⬇️</span><h3>Download</h3><p>Descarga los archivos del modelo para otros proyectos.</p></div></div><a class="resource" href="https://teachablemachine.withgoogle.com/" target="_blank" rel="noopener">↗ Guía oficial de Teachable Machine</a></div></section>
-<section class="slide"><div class="content center"><div class="kicker">Mini challenge</div><div class="big-question">Pásale tu modelo a alguien y pídele que intente <span class="danger">engañarlo</span></div><p class="sub">Qué errores encuentra alguien que no participó en tu entrenamiento?</p></div></section>
-<section class="slide"><div class="content"><div class="kicker">Antes de terminar</div><h2>Cuéntanos tu <span class="accent">modelo</span></h2><div class="grid-3"><div class="card reveal"><h3>Qué clasifica?</h3></div><div class="card reveal"><h3>Dónde falló?</h3></div><div class="card reveal"><h3>Qué cambiaste?</h3></div></div></div></section>
-<section class="slide"><div class="content center"><div class="kicker">Sesión 3</div><div class="big-question">Un modelo no tiene que quedarse en una <span class="purple">página</span></div><p class="sub">En la siguiente sesión lo conectaremos con una experiencia interactiva.</p></div></section>
+
+  <section class="slide active">
+    <div class="content">
+
+      <div class="kicker">
+        Crea tu primera IA · Sesión 2
+      </div>
+
+      <h1>
+        Entrenar.<br>
+        Probar.<br>
+        <span class="accent">Mejorar.</span>
+      </h1>
+
+      <p class="sub">
+        Hoy cada uno va a construir y poner a prueba su propio modelo.
+      </p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">Recordemos</div>
+
+      <div class="flow">
+        <span class="pill reveal">Datos</span>
+        <span class="arrow reveal">→</span>
+        <span class="pill reveal">Entrenamiento</span>
+        <span class="arrow reveal">→</span>
+        <span class="pill reveal">Modelo</span>
+        <span class="arrow reveal">→</span>
+        <span class="pill reveal">Predicción</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Volvamos a nuestro reto</div>
+
+      <div class="animal-layout">
+
+        <img
+          class="animal-image"
+          src="https://www.telegraph.co.uk/content/dam/news/2016/11/08/Atchoum_trans_NvBQzQNjv4BqpJliwavx4coWFCaEkEsb3kvxIt-lGGWCWqwLa_RXJU8.PNG"
+          alt="Atchoum"
+        />
+
+        <div>
+          <h2>
+            Qué diría nuestro <span class="accent">modelo</span>?
+          </h2>
+
+          <p class="sub">
+            Esta vez no queremos responder nosotros.
+            Queremos construir algo que pueda intentarlo.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Antes de entrenar</div>
+
+      <h2>
+        Revisemos nuestros <span class="accent">datasets</span>
+      </h2>
+
+      <div class="checklist">
+
+        <div class="check reveal">
+          ✓ Tengo 2 o más clases
+        </div>
+
+        <div class="check reveal">
+          ✓ Tengo ejemplos variados
+        </div>
+
+        <div class="check reveal">
+          ✓ Mis clases tienen cantidades similares
+        </div>
+
+        <div class="check reveal">
+          ✓ No estoy repitiendo casi la misma imagen
+        </div>
+
+        <div class="check reveal">
+          ✓ Tengo algunas imágenes que guardaré para probar después
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">Hands on</div>
+
+      <div class="big-question">
+        Abramos <span class="accent">Teachable Machine</span>
+      </div>
+
+      <a
+        class="resource"
+        href="https://teachablemachine.withgoogle.com/train"
+        target="_blank"
+      >
+        Crear un nuevo proyecto ↗
+      </a>
+
+      <a
+        class="resource"
+        href="https://teachablemachine.withgoogle.com/"
+        target="_blank"
+      >
+        Página oficial ↗
+      </a>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Paso 1</div>
+
+      <h2>
+        Una clase = una <span class="accent">categoría</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">🎸</span>
+          <h3>Guitarra</h3>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🎹</span>
+          <h3>Piano</h3>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🥁</span>
+          <h3>Batería</h3>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Paso 2</div>
+
+      <h2>
+        Cargamos nuestros <span class="accent">ejemplos</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">🔄</span>
+          <h3>Ángulos</h3>
+          <p>No siempre la misma foto</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🌤️</span>
+          <h3>Condiciones</h3>
+          <p>Fondos y luces diferentes</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🧩</span>
+          <h3>Variación</h3>
+          <p>Distintos ejemplos de la misma clase</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">Paso 3</div>
+
+      <div class="big-question">
+        Train Model
+      </div>
+
+      <p class="sub">
+        Ahora el modelo busca patrones que le permitan diferenciar nuestras clases.
+      </p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Resultado</div>
+
+      <h2>
+        Qué significa ese <span class="purple">porcentaje</span>?
+      </h2>
+
+      <div class="confidence">
+
+        <div class="bar-row reveal">
+          <span>Gato</span>
+          <div class="bar">
+            <div class="fill" style="width:82%"></div>
+          </div>
+          <span>82%</span>
+        </div>
+
+        <div class="bar-row reveal">
+          <span>Perro</span>
+          <div class="bar">
+            <div class="fill" style="width:18%"></div>
+          </div>
+          <span>18%</span>
+        </div>
+
+      </div>
+
+      <p class="sub reveal">
+        No significa que el modelo “sepa” la respuesta.
+        Es una medida de qué clase coincide mejor con los patrones aprendidos.
+      </p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">La prueba importante</div>
+
+      <div class="big-question">
+        Y si usamos una imagen que <span class="warning">nunca vio</span>?
+      </div>
+
+      <p class="sub reveal">
+        Ahí empezamos a descubrir si realmente aprendió algo útil.
+      </p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">Experimentemos</div>
+
+      <div class="big-question">
+        Intentemos <span class="danger">engañarlo</span>
+      </div>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">🔄</span>
+          <h3>Otro ángulo</h3>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🌑</span>
+          <h3>Otra iluminación</h3>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🆕</span>
+          <h3>Otro ejemplo</h3>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="big-question">
+        Falló.<br>
+        <span class="accent reveal">Eso es útil.</span>
+      </div>
+
+      <p class="sub reveal">
+        Ahora sabemos qué tipo de datos necesita ver.
+      </p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Iterar</div>
+
+      <h2>
+        Mejorar el dataset → <span class="accent">reentrenar</span>
+      </h2>
+
+      <div class="flow">
+
+        <span class="pill reveal">
+          Encontrar error
+        </span>
+
+        <span class="arrow reveal">→</span>
+
+        <span class="pill reveal">
+          Agregar ejemplos
+        </span>
+
+        <span class="arrow reveal">→</span>
+
+        <span class="pill reveal">
+          Entrenar otra vez
+        </span>
+
+        <span class="arrow reveal">→</span>
+
+        <span class="pill reveal">
+          Volver a probar
+        </span>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Comparar</div>
+
+      <h2>
+        Modelo v1 vs <span class="accent">Modelo v2</span>
+      </h2>
+
+      <div class="compare">
+
+        <div class="version">
+          <strong>v1</strong>
+          <p>
+            Pocos ejemplos.<br>
+            Poco variados.<br>
+            Falla con facilidad.
+          </p>
+        </div>
+
+        <div class="vs">
+          →
+        </div>
+
+        <div class="version">
+          <strong>v2</strong>
+          <p>
+            Más variedad.<br>
+            Mejores ejemplos.<br>
+            Mejor generalización.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Ejemplo real</div>
+
+      <h2>
+        Incluso una banana puede convertirse en un problema de
+        <span class="accent">clasificación</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">🟢</span>
+          <h3>Verde</h3>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🍌</span>
+          <h3>Madura</h3>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🟤</span>
+          <h3>Muy madura</h3>
+        </div>
+
+      </div>
+
+      <a
+        class="resource"
+        href="https://teachablemachine.withgoogle.com/"
+        target="_blank"
+      >
+        Ver Bananameter y otros ejemplos ↗
+      </a>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Guardar</div>
+
+      <h2>
+        Nuestro modelo no tiene que quedarse <span class="accent">aquí</span>
+      </h2>
+
+      <div class="grid-3">
+
+        <div class="card reveal">
+          <span class="emoji">💾</span>
+          <h3>Guardar</h3>
+          <p>Podemos conservar nuestro proyecto para seguir trabajando.</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">📦</span>
+          <h3>Exportar</h3>
+          <p>Descargar o publicar el modelo.</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="emoji">🔗</span>
+          <h3>Compartir</h3>
+          <p>Usarlo desde otra aplicación o proyecto.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">Mini challenge</div>
+
+      <div class="big-question">
+        Pásale tu modelo a alguien
+      </div>
+
+      <p class="sub">
+        Puede encontrar una imagen que consiga engañarlo?
+      </p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Pero...</div>
+
+      <h2>
+        Un modelo solo clasificando no parece todavía una
+        <span class="warning">aplicación</span>
+      </h2>
+
+      <p class="sub reveal">
+        Qué pasaría si pudiéramos utilizar esa predicción para controlar algo?
+      </p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content">
+
+      <div class="kicker">Próxima sesión</div>
+
+      <h2>
+        Modelo → <span class="accent">acción</span>
+      </h2>
+
+      <div class="scratch-preview">
+
+        <div class="scratch-sidebar">
+
+          <span class="block">
+            cuando bandera verde
+          </span>
+
+          <span class="block blue">
+            si modelo detecta guitarra
+          </span>
+
+          <span class="block orange">
+            decir "Guitarra!"
+          </span>
+
+        </div>
+
+        <div class="scratch-stage">
+
+          <div>
+            <div class="sprite">🐱</div>
+
+            <h3 style="font-size:34px;margin-top:10px">
+              Scratch + nuestro modelo
+            </h3>
+
+            <p style="
+              margin-top:10px;
+              color:#6c7180;
+              font-size:21px;
+              line-height:1.4;
+            ">
+              En la próxima sesión veremos cómo una predicción
+              puede convertirse en una interacción.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <a
+        class="resource"
+        href="https://github.com/champierre/tm2scratch/blob/main/README.en.md"
+        target="_blank"
+      >
+        Conocer TM2Scratch ↗
+      </a>
+
+      <a
+        class="resource"
+        href="https://stretch3.github.io/"
+        target="_blank"
+      >
+        Ver el editor que usaremos ↗
+      </a>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="content center">
+
+      <div class="kicker">Sesión 2</div>
+
+      <div class="big-question">
+        Qué aprendió <span class="accent">tu modelo</span>?
+      </div>
+
+      <p class="sub">
+        Y más importante: qué le falta aprender todavía?
+      </p>
+    </div>
+  </section>
+
 </div>
-<div class="hint">← → navegar · espacio revelar · F pantalla completa</div><div class="controls"><span id="counter">1 / 18</span><span>Crea tu primera IA · Wasi Space × Nos Gusta la Ciencia</span></div><div class="progress-wrap"><div class="progress" id="progress"></div></div>
+
+<div class="hint">
+  ← → navegar · espacio revelar · F pantalla completa
+</div>
+
+<div class="controls">
+  <span id="counter"></span>
+
+  <span>
+    Crea tu primera IA · Wasi Space × Nos Gusta la Ciencia
+  </span>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress" id="progress"></div>
+</div>
+
 <script>
-const slides=[...document.querySelectorAll('.slide')],counter=document.getElementById('counter'),progress=document.getElementById('progress');let index=0;
-const revealsFor=s=>[...s.querySelectorAll('.reveal')];
-function update(){slides.forEach((s,i)=>s.classList.toggle('active',i===index));counter.textContent=`${index+1} / ${slides.length}`;progress.style.width=`${((index+1)/slides.length)*100}%`}
-function nextStep(){const h=revealsFor(slides[index]).find(el=>!el.classList.contains('shown'));if(h){h.classList.add('shown');return}if(index<slides.length-1){index++;update()}}
-function previousStep(){const shown=revealsFor(slides[index]).filter(el=>el.classList.contains('shown'));if(shown.length){shown.at(-1).classList.remove('shown');return}if(index>0){index--;update()}}
-document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown','Enter'].includes(e.key))nextStep();if(['ArrowLeft','PageUp','Backspace'].includes(e.key))previousStep();if(e.code==='Space'){e.preventDefault();nextStep()}if(e.key.toLowerCase()==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}if(e.key==='Home'){index=0;update()}if(e.key==='End'){index=slides.length-1;update()}});
-document.addEventListener('click',e=>{if(e.target.closest('a'))return;nextStep()});update();
-</script></body></html>
+  const slides = [...document.querySelectorAll(".slide")];
+
+  const counter =
+    document.getElementById("counter");
+
+  const progress =
+    document.getElementById("progress");
+
+  let index = 0;
+
+  function reveals() {
+    return [
+      ...slides[index]
+        .querySelectorAll(".reveal")
+    ];
+  }
+
+  function update() {
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle(
+        "active",
+        i === index
+      );
+    });
+
+    counter.textContent =
+      `${index + 1} / ${slides.length}`;
+
+    progress.style.width =
+      `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function next() {
+
+    const hidden =
+      reveals()
+        .find(
+          el =>
+            !el.classList.contains("shown")
+        );
+
+    if (hidden) {
+      hidden.classList.add("shown");
+      return;
+    }
+
+    if (index < slides.length - 1) {
+      index++;
+      update();
+    }
+  }
+
+  function prev() {
+
+    const shown =
+      reveals()
+        .filter(
+          el =>
+            el.classList.contains("shown")
+        );
+
+    if (shown.length) {
+
+      shown[
+        shown.length - 1
+      ].classList.remove("shown");
+
+      return;
+    }
+
+    if (index > 0) {
+      index--;
+      update();
+    }
+  }
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        [
+          "ArrowRight",
+          "PageDown",
+          "Enter"
+        ].includes(event.key)
+      ) {
+        next();
+      }
+
+      if (
+        [
+          "ArrowLeft",
+          "PageUp",
+          "Backspace"
+        ].includes(event.key)
+      ) {
+        prev();
+      }
+
+      if (event.code === "Space") {
+        event.preventDefault();
+        next();
+      }
+
+      if (
+        event.key.toLowerCase() === "f"
+      ) {
+
+        if (!document.fullscreenElement) {
+          document.documentElement
+            .requestFullscreen?.();
+        } else {
+          document.exitFullscreen?.();
+        }
+      }
+    }
+  );
+
+  document.addEventListener(
+    "click",
+    event => {
+
+      if (event.target.closest("a")) {
+        return;
+      }
+
+      next();
+    }
+  );
+
+  update();
+</script>
+
+</body>
+</html>
